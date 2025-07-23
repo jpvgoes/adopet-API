@@ -77,7 +77,7 @@ npm start
 ## 📚 Usage
 
 - The API will be available at `http://localhost:3000` by default.
-- Use tools like [Postman](https://www.postman.com/) to test endpoints (see `Postman.json` for examples).
+- Use tools like [Postman](https://www.postman.com/) to test endpoints (see `Adopet.postman_collection.json` for examples).
 
 ---
 

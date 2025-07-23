@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { TipoPet } from "../types/TipoPet";
-import { EnumRaca } from "../types/EnumRaca";
+import { EnumEspecie } from "../types/EnumEspecie";
 
 const listaDePets: TipoPet[] = [];
 
@@ -15,7 +15,7 @@ export default class PetController {
     const { adotado, especie, dataNascimento, nome } = <TipoPet>req.body;
     // const novaDataNascimento = new Date(dataNascimento);
 
-    if (!Object.values(EnumRaca).includes(especie)) {
+    if (!Object.values(EnumEspecie).includes(especie)) {
       return res.status(400).json({ erro: "Espécie inválida" });
     }
 

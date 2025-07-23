@@ -1,4 +1,4 @@
-export enum EnumRaca {
+export enum EnumEspecie {
   CACHORRO = "cachorro",
   GATO = "gato",
 }
