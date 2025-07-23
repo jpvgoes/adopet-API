@@ -14,17 +14,27 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": [
+    "@typescript-eslint"
+  ],
   "rules": {
     "@typescript-eslint/no-unsafe-return": "off",
     "@typescript-eslint/no-misused-promises": "off",
-    "linebreak-style": ["error", "windows"],
-    "quotes": ["error", "double"],
-    "semi": ["error", "always"]
+    "linebreak-style": [
+      "error",
+      "windows"
+    ],
+    "quotes": [
+      "error",
+      "double"
+    ],
+    "semi": "off"
   },
   "overrides": [
     {
-      "files": ["*.ts"]
+      "files": [
+        "*.ts"
+      ]
     }
   ]
 }

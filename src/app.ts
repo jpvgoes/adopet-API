@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 router(app);
 
-AppDataSource.initialize()
+AppDataSource.initialize() //inicializa o banco de dados
   .then(() => {
     console.log("Data Source has been initialized!");
   })
