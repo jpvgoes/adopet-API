@@ -1,13 +1,13 @@
 import { Router } from "express";
 import PetController from "../controller/PetController";
 
-const router = Router();
+const petRouter = Router();
 
 const petController = new PetController();
 
-router.post("/", (req, res) => {
-  petController.criaPet(req, res);
-});
-router.get("/", (req, res) => petController.inicio(req, res));
+petRouter.get("/", (req, res) => petController.listaPets(req, res));
+petRouter.post("/", (req, res) => petController.criaPet(req, res));
+petRouter.put("/:id", (req, res) => petController.atualizaPet(req, res));
+petRouter.delete("/:id", (req, res) => petController.deletaPet(req, res));
 
-export default router;
+export default petRouter;

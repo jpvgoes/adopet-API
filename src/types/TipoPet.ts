@@ -1,7 +1,9 @@
+import { EnumRaca } from "./EnumRaca";
+
 export type TipoPet = {
   id: number;
   nome: string;
-  especie: string;
+  especie: EnumRaca;
   adotado: boolean;
-  idade: number;
+  dataNascimento: Date;
 };
