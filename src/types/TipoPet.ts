@@ -1,7 +1,7 @@
 import { EnumEspecie } from "./EnumEspecie";
 
 export type TipoPet = {
-  id: number;
+  id?: number;
   nome: string;
   especie: EnumEspecie;
   adotado: boolean;

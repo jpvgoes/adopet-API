@@ -6,7 +6,7 @@ import { TipoPet } from "../types/TipoPet";
 @Entity()
 export class PetEntity implements TipoPet {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column()
   nome: string;
@@ -19,4 +19,11 @@ export class PetEntity implements TipoPet {
 
   @Column()
   dataNascimento: Date;
+
+  constructor(pet?: TipoPet) {
+    this.nome = pet?.nome;
+    this.especie = pet?.especie;
+    this.adotado = pet?.adotado;
+    this.dataNascimento = pet?.dataNascimento;
+  }
 }

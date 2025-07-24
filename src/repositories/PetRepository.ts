@@ -9,17 +9,54 @@ export default class PetRepository implements InterfacePetRepository {
     this.repository = repository;
   }
 
-  async criaPet(pet: PetEntity): Promise<void> {
-    await this.repository.save(pet);
+  async criaPet(pet: PetEntity): Promise<PetEntity> {
+    const novoPet = await this.repository.save(pet);
+    return novoPet;
   }
 
-  listaPet(): Promise<Array<PetEntity>> {
-    throw new Error("Method not implemented.");
+  async listaPet(): Promise<Array<PetEntity>> {
+    return await this.repository.find();
   }
-  atualizaPet(id: number, pet: PetEntity): Promise<void> {
-    throw new Error("Method not implemented.");
+
+  async atualizaPet(
+    id: number,
+    pet: PetEntity
+  ): Promise<{ success: boolean; message?: string }> {
+    try {
+      const petToUpdate = await this.repository.findOne({ where: { id } });
+
+      if (!petToUpdate) {
+        return { success: false, message: "Pet não encontrado" };
+      }
+
+      Object.assign(petToUpdate, pet);
+
+      await this.repository.save(petToUpdate);
+
+      return { success: true };
+    } catch (error) {
+      console.log(error);
+      return {
+        success: false,
+        message: "Ocorreu um erro ao tentar atualizar o pet.",
+      };
+    }
   }
-  deletaPet(id: number, pet: PetEntity): Promise<void> {
-    throw new Error("Method not implemented.");
+
+  async deletaPet(id: number): Promise<{ success: boolean; message?: string }> {
+    try {
+      const petToDelete = await this.repository.findOne({ where: { id } });
+      if (!petToDelete) {
+        return { success: false, message: "Pet não encontrado" };
+      }
+      await this.repository.remove(petToDelete);
+      return { success: true };
+    } catch (error) {
+      console.log(error);
+      return {
+        success: false,
+        message: "Ocorreu um erro ao tentar deletar o pet.",
+      };
+    }
   }
 }

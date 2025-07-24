@@ -3,68 +3,82 @@ import { EnumEspecie } from "../types/EnumEspecie";
 import PetRepository from "../repositories/PetRepository";
 import { PetEntity } from "../entities/PetEntity";
 
-// const listaDePets: TipoPet[] = [];
-
-function geraId(): number {
-  // return listaDePets.length > 0
-  //   ? Math.max(...listaDePets.map((pet) => pet.id)) + 1
-  //   : 1;
-  return 1;
-}
-
 export default class PetController {
   constructor(private petRepository: PetRepository) {
     this.petRepository = petRepository;
   }
 
   async criaPet(req: Request, res: Response): Promise<Response> {
-    const { adotado, especie, dataNascimento, nome } = <PetEntity>req.body;
-    // const novaDataNascimento = new Date(dataNascimento);
+    try {
+      const { adotado, especie, dataNascimento, nome } = req.body as PetEntity;
 
-    if (!Object.values(EnumEspecie).includes(especie)) {
-      return res.status(400).json({ erro: "Espécie inválida" });
+      // Validate required fields
+      if (!nome || !especie || !dataNascimento || adotado === undefined) {
+        return res
+          .status(400)
+          .json({ erro: "Todos os campos são obrigatórios" });
+      }
+
+      // Validate species
+      if (!Object.values(EnumEspecie).includes(especie)) {
+        return res.status(400).json({ erro: "Espécie inválida" });
+      }
+
+      // Validate date
+      const novaDataNascimento = new Date(dataNascimento);
+      if (isNaN(novaDataNascimento.getTime())) {
+        return res.status(400).json({ erro: "Data de nascimento inválida" });
+      }
+
+      const novoPet = new PetEntity({
+        adotado,
+        especie,
+        dataNascimento: novaDataNascimento,
+        nome,
+      });
+
+      const pet = await this.petRepository.criaPet(novoPet);
+      return res.status(201).json(pet);
+    } catch (error) {
+      return res.status(500).json({ erro: "Erro interno do servidor" });
     }
-    const novoPet = new PetEntity();
-    novoPet.adotado = adotado;
-    novoPet.id = geraId();
-    novoPet.especie = especie;
-    novoPet.dataNascimento = dataNascimento;
-    novoPet.nome = nome;
-
-    await this.petRepository.criaPet(novoPet);
-
-    return res.status(201).json(novoPet);
   }
 
-  // listaPets(req: Request, res: Response) {
-  //   return res.status(200).json(listaDePets);
-  // }
+  async listaPets(req: Request, res: Response): Promise<Response> {
+    try {
+      const pets = await this.petRepository.listaPet();
+      return res.status(200).json(pets);
+    } catch (error) {
+      return res.status(500).json({ erro: "Erro interno do servidor" });
+    }
+  }
 
-  // atualizaPet(req: Request, res: Response) {
-  //   const { id } = req.params;
-  //   const { adotado, especie, dataNascimento, nome } = req.body as TipoPet;
-  //   const pet = listaDePets.find((pet) => pet.id === Number(id));
-  //   if (!pet) {
-  //     return res.status(404).json({ erro: "Pet não encontrado" });
-  //   }
+  async atualizaPet(req: Request, res: Response): Promise<Response> {
+    try {
+      const id = Number(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
 
-  //   pet.nome = nome;
-  //   pet.dataNascimento = dataNascimento;
-  //   pet.especie = especie;
-  //   pet.adotado = adotado;
-  //   return res.status(200).json(pet);
-  // }
+      const { success, message } = await this.petRepository.atualizaPet(
+        id,
+        req.body as PetEntity
+      );
+      if (!success) return res.status(404).json({ message });
+      return res.status(204).json({ message: "Pet updated successfully" });
+    } catch (error) {
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
 
-  // // código omitido
+  async deletaPet(req: Request, res: Response): Promise<Response> {
+    try {
+      const id = Number(req.params.id);
+      if (isNaN(id)) return res.status(400).json({ message: "Invalid ID" });
 
-  // deletaPet(req: Request, res: Response) {
-  //   const { id } = req.params;
-  //   const pet = listaDePets.find((pet) => pet.id === Number(id));
-  //   if (!pet) {
-  //     return res.status(404).json({ erro: "Pet não encontrado" });
-  //   }
-  //   const index = listaDePets.indexOf(pet);
-  //   listaDePets.splice(index, 1);
-  //   return res.status(200).json({ mensagem: "Pet deletado com sucesso" });
-  // }
+      const { success, message } = await this.petRepository.deletaPet(id);
+      if (!success) return res.status(404).json({ message });
+      return res.status(204).json({ message: "Pet deleted successfully" });
+    } catch (error) {
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
 }
