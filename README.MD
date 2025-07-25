@@ -1,17 +1,17 @@
-# TypeScript Node.js API
+# Adopet API – TypeScript & Node.js
 
-A robust and scalable RESTful API built with TypeScript and Node.js, following best practices for maintainability and performance. This project demonstrates a modular structure using controllers, routes, entities, and type definitions, suitable for managing pet-related data.
+Uma API RESTful para gerenciar dados de adoção de pets, construída com TypeScript, Node.js, Express e TypeORM. O projeto segue uma arquitetura modular, com entidades, controllers, repositórios e rotas para pets e adotantes.
 
 ---
 
 ## 🚀 Features
 
-- Modular architecture with controllers, routers, and entities
-- TypeScript for type safety
-- Enum and type definitions for domain modeling
-- Example endpoints for pet management
-- SQLite database integration with TypeORM
-- Ready for extension and production use
+- Arquitetura modular com controllers, repositórios, entidades e rotas
+- TypeScript para segurança de tipos
+- Enum e tipos para modelagem de domínio
+- Endpoints para gerenciamento de pets e adotantes
+- Integração com banco SQLite via TypeORM
+- Pronto para extensão e produção
 
 ---
 
@@ -25,108 +25,86 @@ A robust and scalable RESTful API built with TypeScript and Node.js, following b
 
 ---
 
-## 📦 Project Structure
+## 📦 Estrutura do Projeto
 
 ```
 API-TypeScript/
 ├── src/
-│   ├── app.ts                # App entry point
+│   ├── app.ts                # Ponto de entrada da aplicação
 │   ├── config/
-│   │   ├── dataSource.ts     # TypeORM data source config
-│   │   └── database.sqlite   # SQLite database file
+│   │   └── dataSource.ts     # Configuração do TypeORM
 │   ├── controller/
-│   │   └── PetController.ts  # Pet-related request handlers
+│   │   ├── PetController.ts      # Handlers de pets
+│   │   └── AdotanteController.ts # Handlers de adotantes
 │   ├── entities/
-│   │   └── PetEntity.ts      # Pet entity definition
+│   │   ├── PetEntity.ts          # Entidade Pet
+│   │   └── AdotanteEntity.ts     # Entidade Adotante
+│   ├── repositories/
+│   │   ├── PetRepository.ts      # Repositório Pet
+│   │   └── AdotanteRepository.ts # Repositório Adotante
+│   ├── interfaces/
+│   │   ├── InterfacePetRepository.ts      # Interface Pet
+│   │   └── InterfaceAdotanteRepository.ts # Interface Adotante
 │   ├── routes/
-│   │   ├── index.ts          # Main router
-│   │   └── petRouter.ts      # Pet routes
+│   │   ├── index.ts          # Router principal
+│   │   ├── petRouter.ts      # Rotas de pets
+│   │   └── adotanteRouter.ts # Rotas de adotantes
 │   └── types/
-│       ├── EnumEspecie.ts    # Enum for pet species
-│       └── TipoPet.ts        # Type for pet
-├── server.ts                 # Server bootstrap
-├── package.json              # Dependencies and scripts
-├── tsconfig.json             # TypeScript config
-├── .gitignore                # Git ignore rules
-└── README.md                 # Project documentation
+│       ├── EnumEspecie.ts    # Enum de espécies
+│       ├── TipoPet.ts        # Tipo Pet
+│       └── TipoAdotante.ts   # Tipo Adotante
+├── server.ts                 # Inicialização do servidor
+├── package.json              # Dependências e scripts
+├── tsconfig.json             # Configuração TypeScript
+└── README.md                 # Documentação
 ```
 
 ---
 
-## 🏁 Getting Started
+## 🏁 Como rodar o projeto
 
-### 1. Clone the repository
+1. Clone o repositório:
 
 ```bash
 git clone <repository-url>
 cd API-TypeScript
 ```
 
-### 2. Install dependencies
+2. Instale as dependências:
 
 ```bash
 npm install
 ```
 
-### 3. Set up the database
+3. O banco SQLite será criado automaticamente em `src/config/database.sqlite` ao rodar a aplicação.
 
-- The project uses SQLite by default. The database file will be created automatically in `src/config/database.sqlite` when you run the app.
-- If you want to use a different database, update the TypeORM config in `src/config/dataSource.ts`.
-
-### 4. Configure environment variables (optional)
-
-- You can create a `.env` file in the project root to override default settings (e.g., port, database path).
-- Example:
-
-```
-PORT=3000
-DATABASE_PATH=src/config/database.sqlite
-```
-
-### 5. Run the development server
+4. Inicie o servidor de desenvolvimento:
 
 ```bash
-npm run dev
-```
-
-Or, to build and run in production:
-
-```bash
-npm run build
 npm start
 ```
 
----
-
-## 📚 Usage
-
-- The API will be available at `http://localhost:3000` by default.
-- Use tools like [Postman](https://www.postman.com/) to test endpoints (see `Adopet.postman_collection.json` for examples).
+A API estará disponível em `http://localhost:3000`.
 
 ---
 
-## 📖 API Endpoints (Examples)
+## 📚 Endpoints principais
 
-- `GET /pets` — List all pets
-- `POST /pets` — Add a new pet
-- `GET /pets/:id` — Get pet by ID
-- `PUT /pets/:id` — Update pet by ID
-- `DELETE /pets/:id` — Remove pet by ID
+### Pets
 
-> For full details, see the route, controller, and entity files in `src/routes/`, `src/controller/`, and `src/entities/`.
+- `GET /pets` — Lista todos os pets
+- `POST /pets` — Cria um novo pet
+- `PUT /pets/:id` — Atualiza um pet
+- `DELETE /pets/:id` — Remove um pet
 
----
+### Adotantes
 
-## 🤝 Contributing
+- `POST /adotantes` — Cria um novo adotante
 
-1. Fork the repository
-2. Create a new branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -m 'Add feature'`)
-4. Push to the branch (`git push origin feature/your-feature`)
-5. Open a Pull Request
+> Veja exemplos de uso no arquivo `Adopet.postman_collection.json`.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+Este projeto está sob a licença MIT. Veja [LICENSE](LICENSE) para detalhes.
