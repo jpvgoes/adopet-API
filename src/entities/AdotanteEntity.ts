@@ -11,9 +11,9 @@ export class AdotanteEntity implements TipoAdotante {
   senha: string;
   @Column()
   celular: string;
-  @Column()
+  @Column({ nullable: true })
   foto: string;
-  @Column()
+  @Column({ nullable: true })
   endereco: string;
 
   constructor(adotante?: TipoAdotante) {

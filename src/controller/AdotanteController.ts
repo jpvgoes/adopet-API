@@ -13,10 +13,14 @@ export default class AdotanteController {
       const { nome, senha, celular, foto, endereco } =
         req.body as AdotanteEntity;
 
-      if (!nome || !senha || !celular || !foto || !endereco) {
+      const obrigatorios = { nome, senha, celular };
+      const camposFaltando = Object.entries(obrigatorios)
+        .filter(([_, v]) => !v)
+        .map(([k]) => k);
+      if (camposFaltando.length) {
         return res
           .status(400)
-          .json({ erro: "Todos os campos são obrigatórios" });
+          .json({ erro: `Os seguintes campos são obrigatórios: ${camposFaltando.join(", ")}` });
       }
 
       //adicionar mais validações
