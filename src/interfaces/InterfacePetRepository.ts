@@ -1,5 +1,5 @@
 import { PetEntity } from "../entities/PetEntity";
-
+//interface para os metodos do repositorio de pet
 export default interface InterfacePetRepository {
   criaPet(pet: PetEntity): Promise<PetEntity>;
   listaPet(): Promise<Array<PetEntity>>;

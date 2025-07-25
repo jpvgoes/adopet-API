@@ -1,7 +1,8 @@
 import { Repository } from "typeorm";
 import { PetEntity } from "../entities/PetEntity";
-import InterfacePetRepository from "./InterfacePetRepository";
+import InterfacePetRepository from "../interfaces/InterfacePetRepository";
 
+//camada que vai fazer a comunicação com o banco de dados
 export default class PetRepository implements InterfacePetRepository {
   private repository: Repository<PetEntity>; // repository é uma instância do tipo Repository<PetEntity>
 
