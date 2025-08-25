@@ -4,9 +4,11 @@ import {
     Column,
     OneToOne,
     JoinColumn,
+    OneToMany,
 } from "typeorm";
 import { TipoAdotante } from "../types/TipoAdotante";
 import { EnderecoEntity } from "./EnderecoEntity";
+import { PetEntity } from "./PetEntity";
 
 @Entity()
 export class AdotanteEntity implements TipoAdotante {
@@ -26,8 +28,10 @@ export class AdotanteEntity implements TipoAdotante {
         eager: true,
     })
     @JoinColumn()
-    @Column({ nullable: true })
     endereco?: EnderecoEntity;
+
+    @OneToMany(() => PetEntity, (pet) => pet.adotante)
+    pets!: PetEntity[];
 
     constructor(adotante?: TipoAdotante) {
         this.nome = adotante?.nome;

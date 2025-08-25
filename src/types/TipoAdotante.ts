@@ -1,4 +1,5 @@
 import { EnderecoEntity } from "../entities/EnderecoEntity";
+import { PetEntity } from "../entities/PetEntity";
 
 export type TipoAdotante = {
     id?: number;
@@ -7,4 +8,5 @@ export type TipoAdotante = {
     celular: string;
     foto: string;
     endereco?: EnderecoEntity;
+    pets?: PetEntity[];
 };

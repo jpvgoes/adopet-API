@@ -1,6 +1,7 @@
 import { Repository } from "typeorm";
 import { AdotanteEntity } from "../entities/AdotanteEntity";
 import InterfaceAdotanteRepository from "../interfaces/InterfaceAdotanteRepository";
+import { EnderecoEntity } from "../entities/EnderecoEntity";
 
 //camada que vai fazer a comunicação com o banco de dados
 export default class AdotanteRepository implements InterfaceAdotanteRepository {
@@ -58,6 +59,29 @@ export default class AdotanteRepository implements InterfaceAdotanteRepository {
             return {
                 success: false,
                 message: "Ocorreu um erro ao tentar deletar o adotante.",
+            };
+        }
+    }
+
+    async atualizaEnderecoAdotante(
+        idAdotante: number,
+        endereco: EnderecoEntity
+    ): Promise<{ success: boolean; message?: string }> {
+        try {
+            const adotanteToUpdate = await this.repository.findOne({
+                where: { id: idAdotante },
+            });
+            if (!adotanteToUpdate) {
+                return { success: false, message: "Adotante não encontrado" };
+            }
+            adotanteToUpdate.endereco = endereco;
+            await this.repository.save(adotanteToUpdate);
+            return { success: true };
+        } catch (error) {
+            console.log(error);
+            return {
+                success: false,
+                message: "Ocorreu um erro ao tentar atualizar o endereco.",
             };
         }
     }

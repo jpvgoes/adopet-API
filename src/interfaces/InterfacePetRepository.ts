@@ -8,4 +8,8 @@ export default interface InterfacePetRepository {
         pet: PetEntity
     ): Promise<{ success: boolean; message?: string }>;
     deletaPet(id: number): Promise<{ success: boolean; message?: string }>;
+    adotaPet(
+        idPet: number,
+        idAdotante: number
+    ): Promise<{ success: boolean; message?: string }>;
 }
