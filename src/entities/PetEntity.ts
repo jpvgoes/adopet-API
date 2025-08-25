@@ -3,6 +3,7 @@ import { EnumEspecie } from "../types/EnumEspecie";
 
 import { TipoPet } from "../types/TipoPet";
 import { AdotanteEntity } from "./AdotanteEntity";
+import EnumPortePet from "../types/EnumPortePet";
 
 @Entity()
 export class PetEntity implements TipoPet {
@@ -14,6 +15,9 @@ export class PetEntity implements TipoPet {
 
     @Column()
     especie: EnumEspecie;
+
+    @Column({ nullable: true })
+    porte?: EnumPortePet;
 
     @Column()
     adotado: boolean;
@@ -27,6 +31,7 @@ export class PetEntity implements TipoPet {
     constructor(pet?: TipoPet) {
         this.nome = pet?.nome;
         this.especie = pet?.especie;
+        this.porte = pet?.porte;
         this.adotado = pet?.adotado;
         this.dataNascimento = pet?.dataNascimento;
     }

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { EnumEspecie } from "../types/EnumEspecie";
 import PetRepository from "../repositories/PetRepository";
 import { PetEntity } from "../entities/PetEntity";
+import EnumPortePet from "../types/EnumPortePet";
 
 export default class PetController {
     constructor(private petRepository: PetRepository) {
@@ -10,11 +11,17 @@ export default class PetController {
 
     async criaPet(req: Request, res: Response): Promise<Response> {
         try {
-            const { adotado, especie, dataNascimento, nome } =
+            const { adotado, especie, dataNascimento, nome, porte } =
                 req.body as PetEntity;
 
             // Validate required fields
-            if (!nome || !especie || !dataNascimento || adotado === undefined) {
+            if (
+                !nome ||
+                !especie ||
+                !dataNascimento ||
+                adotado === undefined ||
+                !porte
+            ) {
                 return res
                     .status(400)
                     .json({ erro: "Todos os campos são obrigatórios" });
@@ -23,6 +30,10 @@ export default class PetController {
             // Validate species
             if (!Object.values(EnumEspecie).includes(especie)) {
                 return res.status(400).json({ erro: "Espécie inválida" });
+            }
+
+            if (!(porte in EnumPortePet)) {
+                return res.status(400).json({ erro: "Porte inválido" });
             }
 
             // Validate date
@@ -36,6 +47,7 @@ export default class PetController {
             const novoPet = new PetEntity({
                 adotado,
                 especie,
+                porte,
                 dataNascimento: novaDataNascimento,
                 nome,
             });
@@ -90,17 +102,37 @@ export default class PetController {
             return res.status(500).json({ message: "Internal server error" });
         }
     }
-    async adotaPet(req: Request, res: Response) {
-        const { pet_id, adotante_id } = req.params;
+    async adotaPet(req: Request, res: Response): Promise<Response> {
+        try {
+            const { pet_id, adotante_id } = req.params;
 
-        const { success, message } = await this.petRepository.adotaPet(
-            Number(pet_id),
-            Number(adotante_id)
-        );
+            const { success, message } = await this.petRepository.adotaPet(
+                Number(pet_id),
+                Number(adotante_id)
+            );
 
-        if (!success) {
-            return res.status(404).json({ message });
+            if (!success) {
+                return res.status(404).json({ message });
+            }
+            return res.sendStatus(204);
+        } catch (error) {
+            return res.status(500).json({ message: "Internal server error" });
         }
-        return res.sendStatus(204);
+    }
+
+    async buscaPetPeloPorte(req: Request, res: Response): Promise<Response> {
+        try {
+            const { porte } = req.query;
+            if (typeof porte !== "string" || !(porte in EnumPortePet)) {
+                return res.status(400).json({ erro: "Porte inválido" });
+            }
+            const listaDePets = await this.petRepository.buscaPetPeloPorte(
+                porte as EnumPortePet
+            );
+
+            return res.status(200).json(listaDePets);
+        } catch (error) {
+            return res.status(500).json({ message: "Internal server error" });
+        }
     }
 }

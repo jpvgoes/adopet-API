@@ -2,6 +2,7 @@ import { Repository } from "typeorm";
 import { PetEntity } from "../entities/PetEntity";
 import InterfacePetRepository from "../interfaces/InterfacePetRepository";
 import { AdotanteEntity } from "../entities/AdotanteEntity";
+import EnumPortePet from "../types/EnumPortePet";
 
 //camada que vai fazer a comunicação com o banco de dados
 export default class PetRepository implements InterfacePetRepository {
@@ -93,5 +94,8 @@ export default class PetRepository implements InterfacePetRepository {
         pet.adotado = true;
         await this.petRepository.save(pet);
         return { success: true };
+    }
+    async buscaPetPeloPorte(porte: EnumPortePet): Promise<Array<PetEntity>> {
+        return await this.petRepository.find({ where: { porte: porte } });
     }
 }
